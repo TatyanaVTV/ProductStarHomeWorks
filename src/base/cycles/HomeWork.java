@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.StringJoiner;
 
 public class HomeWork {
+
     public static void main(String[] args) {
         System.out.println("Введите число: ");
         Scanner in = new Scanner(System.in);
@@ -29,6 +30,8 @@ public class HomeWork {
         }
 
         System.out.println(answer);
+
+        in.close();
     }
 
     private static String getStrForValue(int value) {
