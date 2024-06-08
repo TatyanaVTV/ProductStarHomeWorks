@@ -1,4 +1,4 @@
-package base.classes;
+package base.classes.base;
 
 public abstract class Person {
     private final String firstName;

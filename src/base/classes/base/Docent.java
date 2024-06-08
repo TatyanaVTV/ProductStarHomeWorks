@@ -1,4 +1,4 @@
-package base.classes;
+package base.classes.base;
 
 public class Docent extends Person {
     public Docent(String firstName, String lastName) {
