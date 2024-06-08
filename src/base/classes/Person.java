@@ -1,8 +1,8 @@
 package base.classes;
 
 public abstract class Person {
-    String firstName;
-    String lastName;
+    private final String firstName;
+    private final String lastName;
     boolean isSignedFireProtectionEducation;
 
     public abstract void attendLecture();
@@ -10,6 +10,14 @@ public abstract class Person {
     public Person(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void signFireProtectionEducation() {

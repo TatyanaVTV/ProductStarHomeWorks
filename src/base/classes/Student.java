@@ -7,6 +7,6 @@ public class Student extends Person {
 
     @Override
     public void attendLecture() {
-        System.out.println("Student " + firstName + " " + lastName + " attended a lecture!");
+        System.out.println("Student " + getFirstName() + " " + getLastName() + " attended a lecture!");
     }
 }
