@@ -43,18 +43,22 @@ class Price {
     }
 
     public double getTaxPercent() {
-        if (value <= 100) {
+        if (0 <= value && value <= 100) {
             return 10;
-        } else if (value <= 1000) {
+        } else if (100 < value && value <= 1000) {
             return 20;
-        } else if (value <= 10000) {
+        } else if (1000 < value && value <= 10000) {
             return 30;
-        } else return 0.;
+        } else return 0;
+    }
+
+    public double calcTax() {
+        return getValue() * getTaxPercent() / 100;
     }
 
     @Override
     public String toString() {
-        return "Price{value=" + getValue() + ", tax=" + getTaxPercent() + "%}";
+        return "Price{value=" + getValue() + ", tax=" + getTaxPercent() + "%, tax=" + calcTax() + "}";
     }
 }
 
