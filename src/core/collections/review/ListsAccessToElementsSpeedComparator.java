@@ -34,8 +34,8 @@ public class ListsAccessToElementsSpeedComparator {
 
         for (int count = 0; count < 1000; count++) {
             int index = RND.nextInt(1_000_000);
-            accessTimeForArrayList.add(getTimeForAccessingRandomElementByIndex(arrayList, index));
-            accessTimeForLinkedList.add(getTimeForAccessingRandomElementByIndex(linkedList, index));
+            accessTimeForArrayList.add(getTimeForAccessingElementByIndex(arrayList, index));
+            accessTimeForLinkedList.add(getTimeForAccessingElementByIndex(linkedList, index));
         }
 
         System.out.printf("Minimal time for ArrayList:  %d ns\n", accessTimeForArrayList.first());
@@ -44,7 +44,7 @@ public class ListsAccessToElementsSpeedComparator {
         System.out.printf("Maximum time for LinkedList: %d ns\n", accessTimeForLinkedList.last());
     }
 
-    private static long getTimeForAccessingRandomElementByIndex(List list, int index) {
+    private static long getTimeForAccessingElementByIndex(List list, int index) {
         long startTime = System.nanoTime();
         list.get(index);
         return System.nanoTime() - startTime;
