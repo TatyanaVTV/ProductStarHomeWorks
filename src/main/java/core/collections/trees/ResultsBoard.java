@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.TreeSet;
 
 public class ResultsBoard {
@@ -40,10 +41,26 @@ public class ResultsBoard {
 }
 
 record Student(String name, Float score) implements Comparable<Student> {
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Student) {
+            return name.equals(((Student) obj).name());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, score) ;
+    }
 
     @Override
     public int compareTo(@NotNull Student o) {
-        return Float.compare(score, o.score);
+        if (score.compareTo(o.score) == 0) {
+            return name.compareTo(o.name);
+        } else {
+            return Float.compare(score, o.score);
+        }
     }
 
     @Override
