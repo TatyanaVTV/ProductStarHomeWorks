@@ -4,21 +4,35 @@ import java.util.Map;
 
 public class StudentCommandHandler {
     private StudentStorage studentStorage = new StudentStorage();
-    public void processCommand(Command command) {
+    public void processCommand(Command command) throws WrongDataFormatException {
         Action action = command.getAction();
-        switch (action) {
-            case CREATE -> processCreateCommand(command);
-            case UPDATE -> processUpdateCommand(command);
-            case DELETE -> processDeleteCommand(command);
-            case STATS_BY_COURSE -> processStatsByCourseCommand(command);
-            case SEARCH -> processSearchCommand(command);
-            default -> {
-                System.out.printf("Действие %s не поддерживается.\n", action);
-            }
-        }
 
-        System.out.println("Обработка команды. Действие: " + command.getAction().name()
-                                            + ", данные: " + command.getData());
+        try {
+            switch (action) {
+                case CREATE -> processCreateCommand(command);
+                case UPDATE -> processUpdateCommand(command);
+                case DELETE -> processDeleteCommand(command);
+                case STATS_BY_COURSE -> processStatsByCourseCommand(command);
+                case STATS_BY_CITY -> processStatsByCityCommand(command);
+                case SEARCH -> processSearchCommand(command);
+                default -> System.out.printf("Действие %s не поддерживается.\n", action);
+            }
+        } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
+            throw new WrongDataFormatException(command, getDataFormatForAction(action), e);
+        } finally {
+            System.out.println("Обработка команды. Действие: " + command.getAction().name()
+                    + ", данные: " + command.getData());
+        }
+    }
+
+    public String getDataFormatForAction(Action action) {
+        return switch (action) {
+            case CREATE -> "surname,name,course,city,age";
+            case UPDATE -> "id,surname,name,course,city,age";
+            case DELETE -> "id";
+            case SEARCH -> "surname / surname,surname / <пусто>";
+            default -> "<пусто>";
+        };
     }
 
     private void processCreateCommand(Command command) {
@@ -39,6 +53,7 @@ public class StudentCommandHandler {
     private void processUpdateCommand(Command command) {
         String data = command.getData();
         String[] dataArray = data.split(",");
+
         Long id = Long.valueOf(dataArray[0]);
 
         Student student = new Student();
@@ -65,7 +80,12 @@ public class StudentCommandHandler {
     }
 
     private void processSearchCommand(Command command) {
-        String surname = command.getData();
-        studentStorage.search(surname);
+        String surnames = command.getData();
+        studentStorage.search(surnames);
+    }
+
+    private void processStatsByCityCommand(Command command) {
+        Map<String, Long> data = studentStorage.getCountByCity();
+        studentStorage.printMap(data);
     }
 }

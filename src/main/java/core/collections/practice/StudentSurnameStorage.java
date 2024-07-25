@@ -28,7 +28,30 @@ public class StudentSurnameStorage {
      * @return set
      */
     public Set<Long> getStudentBySurnamesLessOrEqualThan(String surname) {
-        return surnamesTreeMap.headMap(surname,true)
+        String[] parsedData = surname.split(",");
+        String surnameFrom;
+        String surnameTo;
+
+        switch (parsedData.length) {
+            case 1 -> {
+                if (parsedData[0].isEmpty()) {
+                    surnameFrom = surnamesTreeMap.firstKey();
+                    surnameTo = surnamesTreeMap.lastKey();
+                } else {
+                    surnameFrom = parsedData[0];
+                    surnameTo = parsedData[0];
+                }
+            }
+            case 2 -> {
+                surnameFrom = parsedData[0];
+                surnameTo = parsedData[1];
+            }
+            default -> {
+                throw new IllegalArgumentException("Too many arguments");
+            }
+        }
+
+        return surnamesTreeMap.subMap(surnameFrom, true, surnameTo, true)
                 .values()
                 .stream()
                 .flatMap(longs -> longs.stream()) // "распаковывает" коллекцию

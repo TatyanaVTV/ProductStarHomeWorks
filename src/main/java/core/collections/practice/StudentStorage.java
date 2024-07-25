@@ -53,8 +53,8 @@ public class StudentStorage {
         return removed != null;
     }
 
-    public void search(String surname) {
-        Set<Long> students = studentSurnameStorage.getStudentBySurnamesLessOrEqualThan(surname);
+    public void search(String surnames) {
+        Set<Long> students = studentSurnameStorage.getStudentBySurnamesLessOrEqualThan(surnames);
         for (Long studentId : students) {
             Student student = studentStorageMap.get(studentId);
             System.out.println(student);
@@ -82,6 +82,15 @@ public class StudentStorage {
                         student -> student.getCourse(), // ключ
                         student -> 1L, // значение
                         (count1, count2) -> count1 + count2 // ф-ция определяющая решение коллизий
+                ));
+    }
+
+    public Map<String, Long> getCountByCity() {
+        return studentStorageMap.values().stream()
+                .collect(Collectors.toMap(
+                        student -> student.getCity(),
+                        student -> 1L,
+                        (count1, count2) -> count1 + count2
                 ));
     }
 }
