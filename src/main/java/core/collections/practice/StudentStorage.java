@@ -57,7 +57,7 @@ public class StudentStorage {
         Set<Long> students = studentSurnameStorage.getStudentBySurnamesLessOrEqualThan(surnames);
         for (Long studentId : students) {
             Student student = studentStorageMap.get(studentId);
-            System.out.println(student);
+            System.out.println("[" + studentId + "] " + student);
         }
     }
 
