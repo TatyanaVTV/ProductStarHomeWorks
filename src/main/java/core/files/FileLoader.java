@@ -16,20 +16,23 @@ public class FileLoader {
     private static final String DIRECTORY_REGEX = "^[A-Za-z]:(\\\\[\\w\\s\\(\\)]+)+\\\\?$";
 
     public static void main(String[] args) {
-        while (true) {
-            printOptions();
-            int command = readOption();
+        try {
+            while (true) {
+                printOptions();
+                int command = readOption();
 
-            switch (command) {
-                case -1 -> {}
-                case 1 -> writeToFile();
-                case 2 -> readFromFile();
-                case 0 -> {
-                    IN.close();
-                    return;
+                switch (command) {
+                    case -1 -> {}
+                    case 1 -> writeToFile();
+                    case 2 -> readFromFile();
+                    case 0 -> {
+                        return;
+                    }
+                    default -> System.out.println("Unknown command.\n");
                 }
-                default -> System.out.println("Unknown command.\n");
             }
+        } finally {
+            IN.close();
         }
     }
 
@@ -42,6 +45,9 @@ public class FileLoader {
         System.out.println("Choose option: ");
     }
 
+    /** Reads option code from console.
+     * @return optionCode or -1 in case of any errors.
+     * */
     private static int readOption() {
         try {
             return Integer.parseInt(IN.nextLine());
@@ -50,6 +56,10 @@ public class FileLoader {
         }
     }
 
+    /** Reads fileName, directory and fileSource from console.
+     * Creates directory if not exists. Creates file with fileName if not exists.
+     * Writes fileSource to file with fileName.
+    * */
     private static void writeToFile() {
         System.out.println(">>> Writing text to file");
 
@@ -62,6 +72,7 @@ public class FileLoader {
 
         String fileSource = readFileSource();
 
+        // create folders if they're not exist
         File folder = new File(directory);
         if (!folder.exists()) {
             if (folder.mkdirs()) {
@@ -70,23 +81,34 @@ public class FileLoader {
                 System.out.printf("Folder '%s' hasn't been created! It already exists or cannot be created.", directory);
             }
         }
-        File fileToSave = new File(filePath.replace("\\", "\\\\"));
+
+        // get file to write (create it if not exists)
+        File fileToSave = new File(filePath.replace("\\", File.separator));
         try(FileWriter fileWriter = new FileWriter(fileToSave)) {
             boolean created = fileToSave.createNewFile();
             if (created) {
                 System.out.printf("File '%s' has been created.\n", filePath);
             }
 
-            long start = System.nanoTime();
-            fileWriter.write(fileSource, 0, fileSource.length());
-            fileWriter.flush();
-            System.out.printf("File source for '%s' has been saved.\n", filePath);
-            System.out.printf("File size: %d b, saving time: %d ns\n", fileToSave.length(), System.nanoTime() - start);
+            // write to file and print it's size and saving time
+            if (fileToSave.canWrite()) {
+                long start = System.nanoTime();
+                fileWriter.write(fileSource, 0, fileSource.length());
+                fileWriter.flush();
+                System.out.printf("File source for '%s' has been saved.\n", filePath);
+                System.out.printf("File size: %d b, saving time: %d ns\n", fileToSave.length(), System.nanoTime() - start);
+            } else {
+                System.out.printf("File '%s' exists, but not available to write.%n", fileName);
+            }
         } catch (IOException io) {
-            System.out.println(io.getLocalizedMessage());
+            io.printStackTrace();
         }
     }
 
+
+    /** Reads fileName and directory from console.
+     * Prints fileSource of the file from described directory with fileName (if file is found).
+     * */
     private static void readFromFile() {
         System.out.println(">>> Getting file source");
 
@@ -99,16 +121,16 @@ public class FileLoader {
 
         try {
             File file = new File(filePath.replace("\\", "\\\\"));
-            if (file.exists()) {
+            if (file.exists() && file.canRead()) {
                 List<String> fileSource = Files.readAllLines(file.toPath(), Charset.defaultCharset());
-                System.out.printf("----------------------- File source: -----------------------\n%s:\n", filePath);
+                System.out.printf("----------------------- File source: -----------------------\n%s:%n", filePath);
                 fileSource.forEach(System.out::println);
                 System.out.println("------------------------------------------------------------");
             } else {
-                System.out.printf("File '%s' not found!\n", filePath);
+                System.out.printf("File '%s' not found or cannot be read!%n", filePath);
             }
         } catch (IOException io) {
-            System.out.println(io.getLocalizedMessage());
+            io.printStackTrace();
         }
     }
 
@@ -122,7 +144,7 @@ public class FileLoader {
 
     private static String readFileSource() {
         StringJoiner joiner = new StringJoiner(System.lineSeparator());
-        System.out.println("Type file source (line 'eof' for stop typing):");
+        System.out.println("Type file source (line 'eof' for stop typing): ");
         String readedString;
         while(!(readedString = IN.nextLine()).equals("eof")) {
             joiner.add(readedString);
