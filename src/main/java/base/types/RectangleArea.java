@@ -3,7 +3,7 @@ package base.types;
 import java.util.Scanner;
 
 public class RectangleArea {
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
 
     public static void main(String[] args) {
         var length = readValue("длину");
@@ -14,7 +14,7 @@ public class RectangleArea {
 
     private static double readValue(String name) {
         System.out.printf("Введите %s прямоугольника: ", name);
-        return Double.parseDouble(scanner.nextLine());
+        return Double.parseDouble(SCANNER.nextLine());
     }
 
     private static double calculateArea(double length, double width) {
