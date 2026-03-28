@@ -1,10 +1,10 @@
-package base.practical.third;
+package base.practical.third.playlist;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static base.practical.third.MusicalPlayListMovingException.positionOutSideOfPlaylist;
+import static base.practical.third.playlist.MusicalPlayListMovingException.positionOutSideOfPlaylist;
 
 public class MusicPlaylistImpl implements MusicPlaylist {
     private final ArrayList<String> playlist = new ArrayList<>();

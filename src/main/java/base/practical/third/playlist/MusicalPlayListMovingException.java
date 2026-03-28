@@ -1,4 +1,4 @@
-package base.practical.third;
+package base.practical.third.playlist;
 
 public class MusicalPlayListMovingException extends IndexOutOfBoundsException {
     public MusicalPlayListMovingException(String message) {

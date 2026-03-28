@@ -1,6 +1,8 @@
-package base.practical.third;
+package base.practical.third.playlist;
 
-import java.util.List;public interface MusicPlaylist {
+import java.util.List;
+
+public interface MusicPlaylist {
     List<String> getSongs();
     void addSongs(List<String> titles);
     void addSong(String title);

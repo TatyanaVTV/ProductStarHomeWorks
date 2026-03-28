@@ -1,4 +1,4 @@
-package base.practical.third;
+package base.practical.third.playlist;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
