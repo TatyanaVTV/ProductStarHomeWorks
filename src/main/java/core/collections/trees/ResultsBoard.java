@@ -1,7 +1,5 @@
 package core.collections.trees;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +53,7 @@ record Student(String name, Float score) implements Comparable<Student> {
     }
 
     @Override
-    public int compareTo(@NotNull Student o) {
+    public int compareTo(Student o) {
         if (score.compareTo(o.score) == 0) {
             return name.compareTo(o.name);
         } else {
