@@ -11,6 +11,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class CircleTest {
 
     @Test
+    void testAllArgsConstructor_validStoredValue() {
+        var circle = new Circle(7.5);
+
+        assertEquals(7.5, circle.getRadius(), 0.001,
+                "Геттер должен возвращать сохранённое значение радиуса");
+    }
+
+    @Test
+    void testNoArgsConstructor_validStoredValue() {
+        var circle = new Circle(0.0);
+
+        assertEquals(0.0, circle.getRadius(), 0.001,
+                "Геттер должен возвращать сохранённое значение радиуса");
+    }
+
+    @Test
     void testGetRadius_returnsStoredValue() {
         var circle = new Circle();
         circle.setRadius(7.5);
