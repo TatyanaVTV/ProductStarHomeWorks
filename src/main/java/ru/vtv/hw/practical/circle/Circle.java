@@ -10,7 +10,7 @@ public class Circle {
     private double radius;
 
     public void setRadius(double radius) {
-        if (radius < 0) throw new IllegalArgumentException("Radius cannot be negative!");
+        if (radius < 0) throw new IllegalArgumentException("Радиус должен быть больше нуля!");
 
         this.radius = radius;
     }

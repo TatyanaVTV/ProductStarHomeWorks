@@ -70,9 +70,10 @@ public class CircleTest {
     void testSetRadius_withNegativeValue_throwsException() {
         var circle = new Circle();
 
-        assertThrows(IllegalArgumentException.class,
+        var exception = assertThrows(IllegalArgumentException.class,
                 () -> circle.setRadius(-5.0),
                 "Установка отрицательного радиуса должна вызывать ошибку!");
+        assertEquals("Радиус должен быть больше нуля!", exception.getMessage());
     }
 
     @Test
