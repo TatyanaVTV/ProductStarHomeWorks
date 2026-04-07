@@ -53,6 +53,7 @@ public class DetectiveCaseCheck {
             var action = Action.fromCode(actionCode);
 
             if (action.isRequireAdditionalData()) {
+                System.out.print("Введите значение: ");
                 var data = SCANNER.nextLine();
                 return new Command(action, data);
             } else {
