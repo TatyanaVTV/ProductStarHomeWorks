@@ -48,26 +48,24 @@ public class RankingSystem {
         playerRankings.get(currentRating).remove(player);
 
         System.out.printf("Обновлен рейтинг игрока %s: %d%n", player.getName(), player.getRating());
-
-        var count = 3;
-        var topThree = getTopPlayers(count);
-        var order = new AtomicInteger(1);
-
-        System.out.printf("Топ %d игрока после обновления: %n", count);
-        topThree.forEach(topPlayer -> System.out.printf("%d. %s - %d%n",
-                order.getAndIncrement(), topPlayer.getName(), topPlayer.getRating()));
-
         log.debug("Ranking for player {} has been updated. Old rating = {}, new rating = {}",
                 player, currentRating, newRating);
     }
 
-    public List<Player> getTopPlayers(int n) {
-        if (n <= 0) return List.of();
+    public List<Player> getTopPlayers(int count) {
+        if (count <= 0) return List.of();
 
-        return playerRankings.descendingMap().entrySet().stream()
+        var top = playerRankings.descendingMap().entrySet().stream()
                 .flatMap(entry -> entry.getValue().stream())
-                .limit(n)
+                .limit(count)
                 .collect(Collectors.toList());
+
+        System.out.printf("Топ %d игрока: %n", count);
+        var order = new AtomicInteger(1);
+        top.forEach(topPlayer -> System.out.printf("%d. %s - %d%n",
+                order.getAndIncrement(), topPlayer.getName(), topPlayer.getRating()));
+
+        return top;
     }
 
     public int getPlayerRank(int playerId) {

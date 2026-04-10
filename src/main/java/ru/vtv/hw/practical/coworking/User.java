@@ -40,9 +40,9 @@ public class User implements Comparable<User> {
 
     @Override
     public int compareTo(@NotNull User o) {
-        var compareBuSurname = compare(this.surname, o.surname);
+        var compareBySurname = compare(this.surname, o.surname);
         var compareByName = compare(this.name, o.name);
-        return compareBuSurname == 0 ? compareBuSurname : compareByName;
+        return compareBySurname != 0 ? compareBySurname : compareByName;
     }
 
     @Override
