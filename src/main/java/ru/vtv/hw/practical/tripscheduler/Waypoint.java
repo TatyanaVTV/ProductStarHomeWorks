@@ -15,7 +15,9 @@ public class Waypoint implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    @Builder.Default
+    private final UUID id = UUID.randomUUID();
+
     private String name;
     private BigDecimal price;
 

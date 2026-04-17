@@ -13,7 +13,9 @@ public class Tourist implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    @Builder.Default
+    private final UUID id = UUID.randomUUID();
+
     private String firstName;
     private String lastName;
 }

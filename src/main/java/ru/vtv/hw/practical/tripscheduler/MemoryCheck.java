@@ -1,12 +1,13 @@
 package ru.vtv.hw.practical.tripscheduler;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.vtv.hw.practical.tripscheduler.trips.Trip;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.vtv.hw.practical.tripscheduler.TripFactory.createTrip;
+import static ru.vtv.hw.practical.tripscheduler.TripFactory.createRandomTrip;
 
 @Slf4j
 public class MemoryCheck {
@@ -31,7 +32,7 @@ public class MemoryCheck {
 
         var count = 0;
         while (count++ < LEAKY_TRIP_COUNT) {
-            leakyTripList.add(createTrip());
+            leakyTripList.add(createRandomTrip());
         }
 
         printMemoryUsage("После создания " + LEAKY_TRIP_COUNT + " объектов в leakyTripList");
@@ -50,7 +51,7 @@ public class MemoryCheck {
 
         var count = 0;
         while (count++ < LEAKY_TRIP_COUNT) {
-            weakReferenceTripList.add(new WeakReference<>(createTrip()));
+            weakReferenceTripList.add(new WeakReference<>(createRandomTrip()));
         }
 
         printMemoryUsage("После создания " + LEAKY_TRIP_COUNT + " WeakReference в weakReferenceTripList");

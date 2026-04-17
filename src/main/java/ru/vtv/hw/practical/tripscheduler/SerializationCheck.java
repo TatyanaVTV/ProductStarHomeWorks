@@ -1,17 +1,18 @@
 package ru.vtv.hw.practical.tripscheduler;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.vtv.hw.practical.tripscheduler.trips.Trip;
 
 import java.io.*;
 
-import static ru.vtv.hw.practical.tripscheduler.TripFactory.createTrip;
+import static ru.vtv.hw.practical.tripscheduler.TripFactory.createRandomTrip;
 
 @Slf4j
 public class SerializationCheck {
     private static final String FILE_NAME = "trip.ser";
 
     public static void main(String[] args) {
-        var trip = createTrip();
+        var trip = createRandomTrip();
 
         saveTripToFile(trip, FILE_NAME);
         var deserializedTrip = readAndDisplayTrip(FILE_NAME);
