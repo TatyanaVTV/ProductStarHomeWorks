@@ -26,6 +26,12 @@ dependencies {
 
     // Mockito
     testImplementation 'org.mockito:mockito-core:5.1.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.1.1'
+//    // PowerMock для работы со статическими полями и методами
+//    testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
+//    testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
+//    testImplementation 'org.mockito:mockito-inline:5.1.1'
+//    testImplementation 'org.mockito:mockito-junit-jupiter:5.1.1'
 
     testImplementation 'org.jacoco:org.jacoco.agent:0.8.11'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
@@ -38,4 +44,20 @@ dependencies {
 
 test {
     useJUnitPlatform()
+
+    // Включение параллельного выполнения
+    maxParallelForks = Runtime.runtime.availableProcessors()
+
+    // Изоляция тестов — каждый тест в отдельном процессе
+    forkEvery = 1
+    forkDelay = 1000
+
+    // Настройки JVM для тестов
+    jvmArgs = ['-Xmx1024m', '-XX:+UseG1GC']
+
+    // Опции JUnit Platform
+    systemProperty 'junit.jupiter.execution.parallel.enabled', 'true'
+    systemProperty 'junit.jupiter.execution.parallel.config.strategy', 'fixed'
+    systemProperty 'junit.jupiter.execution.parallel.config.fixed.parallelism', '4'
+    systemProperty 'junit.jupiter.execution.parallel.mode.default', 'concurrent'
 }
