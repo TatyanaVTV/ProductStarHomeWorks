@@ -1,4 +1,4 @@
-package ru.vtv.hw.practical.csvstudents;
+package ru.vtv.hw.practical.csvstudents.importdata;
 
 import java.sql.SQLException;
 

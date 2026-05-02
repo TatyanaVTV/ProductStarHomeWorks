@@ -1,4 +1,4 @@
-package ru.vtv.hw.practical.csvstudents;
+package ru.vtv.hw.practical.csvstudents.importdata;
 
 import lombok.extern.slf4j.Slf4j;
 

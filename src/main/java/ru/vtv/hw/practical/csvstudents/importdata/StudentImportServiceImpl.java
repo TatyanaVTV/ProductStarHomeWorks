@@ -1,4 +1,4 @@
-package ru.vtv.hw.practical.csvstudents;
+package ru.vtv.hw.practical.csvstudents.importdata;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +12,11 @@ import java.sql.SQLException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.sql.DriverManager.getConnection;
-import static ru.vtv.hw.practical.csvstudents.DataImportException.*;
+import static ru.vtv.hw.practical.csvstudents.DataBaseCredentials.DB_URL;
+import static ru.vtv.hw.practical.csvstudents.importdata.DataImportException.*;
 
 @Slf4j
 public class StudentImportServiceImpl implements StudentImportService {
-    private static final String DB_URL =
-            "jdbc:h2:file:./students_db;FILE_LOCK=NO;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;USER=test;PASSWORD=test";
     private static final String CSV_FILE_PATH = "StudentsPerformance.csv";
 
     public void importDataFromCsv() throws DataImportException {
