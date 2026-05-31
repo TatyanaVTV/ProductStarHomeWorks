@@ -31,6 +31,12 @@ public class CalculateCommandHandler implements CommandHandler {
 
     private static final Pattern NUMBER_PATTERN = Pattern.compile("^\\d+([.,]\\d+)?$");
     private static final int PAYMENTS_PER_MESSAGE = 24;
+    private static final BigDecimal MIN_AMOUNT = BigDecimal.valueOf(100_000);
+    private static final BigDecimal MAX_AMOUNT = BigDecimal.valueOf(5_000_000);
+    private static final int MIN_TERM = 12;
+    private static final int MAX_TERM = 72;
+
+
     private final Map<String, DialogState> userStates = new ConcurrentHashMap<>();
 
     public CalculateCommandHandler(CreditService creditService, CommandDispatcher commandDispatcher) {
@@ -77,7 +83,9 @@ public class CalculateCommandHandler implements CommandHandler {
     private SendMessage startDialog(String chatId) {
         userStates.put(chatId, new DialogState());
         dispatcher.setActiveDialog(chatId, this);
-        return sendMessage(chatId, "Введите сумму кредита (например, 100000):");
+        var msg = format("Введите сумму кредита от %d до %d (например, 100000):",
+                MIN_AMOUNT.intValue(), MAX_AMOUNT.intValue());
+        return sendMessage(chatId, msg);
     }
 
     private List<SendMessage> handleAmount(String chatId, String text, DialogState state) {
@@ -85,21 +93,30 @@ public class CalculateCommandHandler implements CommandHandler {
             var msg = sendMessage(chatId, "Пожалуйста, введите корректное число для суммы:");
             return List.of(msg);
         }
-        var amount = new BigDecimal(text).setScale(2, HALF_UP);
+        var amount = parseNumber(text).setScale(2, HALF_UP);
+        if (amount.compareTo(MIN_AMOUNT) < 0 || amount.compareTo(MAX_AMOUNT) > 0) {
+            var msgText = format("Некорректная сумма. Укажите, пожалуйста, значение от %d до %d руб:",
+                    MIN_AMOUNT.intValue(), MAX_AMOUNT.intValue());
+            var msg = sendMessage(chatId, msgText);
+            return List.of(msg);
+        }
+
         state.setAmount(amount);
         state.setStep(Step.AWAITING_TERM);
-        var msg = sendMessage(chatId, "Введите срок кредита в месяцах (например, 60):");
+        var msgText = format("Введите срок кредита от %d до %d месяцев (например, 60):", MIN_TERM, MAX_TERM);
+        var msg = sendMessage(chatId, msgText);
         return List.of(msg);
     }
 
     private List<SendMessage> handleTerm(String chatId, String text, DialogState state) {
-        if (!isValidNumber(text) || new BigDecimal(text).scale() > 0) {
+        if (!isValidNumber(text) || parseNumber(text).scale() > 0) {
             var msg = sendMessage(chatId, "Пожалуйста, введите целое число для срока:");
             return List.of(msg);
         }
         var term = Integer.parseInt(text);
-        if (term < 12 || term > 72) {
-            var msg = sendMessage(chatId, "Некорректный срок. Укажите, пожалуйста, значение от 12 до 72 месяцев:");
+        if (term < MIN_TERM || term > MAX_TERM) {
+            var msgText = format("Некорректный срок. Укажите, пожалуйста, значение от %d до %d месяцев:", MIN_TERM, MAX_TERM);
+            var msg = sendMessage(chatId, msgText);
             return List.of(msg);
         }
 
@@ -114,7 +131,7 @@ public class CalculateCommandHandler implements CommandHandler {
             var msg = sendMessage(chatId, "Пожалуйста, введите корректное число для ставки:");
             return List.of(msg);
         }
-        var rate = new BigDecimal(text).setScale(2, HALF_UP);
+        var rate = parseNumber(text).setScale(2, HALF_UP);
         state.setAnnualRate(rate);
         state.setStep(Step.AWAITING_PAYMENT_TYPE);
         var options = getPaymentTypeOptions();
@@ -242,6 +259,11 @@ public class CalculateCommandHandler implements CommandHandler {
 
     private boolean isValidNumber(String text) {
         return NUMBER_PATTERN.matcher(text).matches();
+    }
+
+    private BigDecimal parseNumber(String text) {
+        String normalized = text.replace(',', '.');
+        return new BigDecimal(normalized);
     }
 
     @Data
