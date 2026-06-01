@@ -36,7 +36,6 @@ public class CalculateCommandHandler implements CommandHandler {
     private static final int MIN_TERM = 12;
     private static final int MAX_TERM = 72;
 
-
     private final Map<String, DialogState> userStates = new ConcurrentHashMap<>();
 
     public CalculateCommandHandler(CreditService creditService, CommandDispatcher commandDispatcher) {
@@ -167,7 +166,6 @@ public class CalculateCommandHandler implements CommandHandler {
         finishDialog(chatId);
         return messages;
     }
-
 
     private String getPaymentTypeOptions() {
         return Arrays.stream(PaymentType.values())
