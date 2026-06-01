@@ -49,6 +49,9 @@ dependencies {
 
     // Для перехвата и тестирования выводов в консоль через System.out, System.err
     testImplementation 'com.github.stefanbirkner:system-lambda:1.2.0'
+
+    // телеграм
+    implementation 'org.telegram:telegrambots:6.9.0'
 }
 
 test {
